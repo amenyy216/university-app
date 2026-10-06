@@ -4,11 +4,21 @@
   padding: 2rem;
   display: grid;
   gap: 1rem;
+  text-align: center;
+  justify-items: center;
   text-align: left;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 1rem;
   box-shadow: var(--shadow);
+}
+
+.profile-img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border);
 }
 
 .student-card h1 {
@@ -17,13 +27,15 @@
 }
 
 .contact-button {
-  justify-self: start;
+  justify-self: center;
+  display: inline-block;
   margin-top: 0.5rem;
   padding: 0.65rem 1rem;
   color: white;
   background: #3979bd;
   border-radius: 0.4rem;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .contact-button:hover {
