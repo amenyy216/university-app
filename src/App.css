@@ -1,0 +1,36 @@
+﻿.student-card {
+  width: min(100% - 2rem, 32rem);
+  margin: 4rem auto;
+  padding: 2rem;
+  display: grid;
+  gap: 1rem;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.student-card h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 8vw, 3rem);
+}
+
+.contact-button {
+  justify-self: start;
+  margin-top: 0.5rem;
+  padding: 0.65rem 1rem;
+  color: white;
+  background: #3979bd;
+  border-radius: 0.4rem;
+  text-decoration: none;
+}
+
+.contact-button:hover {
+  background: #28639f;
+}
+
+.contact-button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
