@@ -1,6 +1,6 @@
 ﻿import { useState } from "react";
 import "./App.css";
-import Header from "./components/Header.jsx";
+import Header from "./Components/Header.jsx";
 import Navbar from "./components/Navbar.jsx";
 import StudentCard from "./Components/StudentCard.jsx";
 import Footer from "./components/Footer.jsx";
@@ -77,6 +77,10 @@ function App() {
       etudiants.map((e) => (e.id === id ? { ...e, prenom: nouveauPrenom } : e))
     );
   }
+     function ajouteretudiant() {
+    props.onSupprimer(props.id);
+  }
+ 
 
   const etudiantsFiltres = etudiants.filter((e) =>
     e.filiere.toLowerCase().includes(filtre.toLowerCase())
