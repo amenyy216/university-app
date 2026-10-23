@@ -1,29 +1,60 @@
-import profileImg from './assets/Profileph.jpg' // L'import de l'image est ici
-const etudiant = {
-  nom: 'Amani Bahri',
-  groupe: 'GLSI 2',
-  ville: 'Mahdia',
-  email: 'amenibahri***@gmail.com',
-  telephone: '********',
-  filiere: 'Génie Logiciel',
-  annee: '2026/2027',
-  image: profileImg
-}
-function StudentCard() {
+import './StudentCard.css';
+import { useState } from "react";
+
+
+function StudentCard(props) {
+  const [coordonneesVisibles, setCoordonneesVisibles] = useState(false);
+  const ville = props.ville || "Non renseignée"; 
+  function basculerCoordonnees() {
+    setCoordonneesVisibles(!coordonneesVisibles);
+  }
+ 
+  function modifier() {
+    const nouveauPrenom = window.prompt("Nouveau prénom :", props.prenom);
+    if (nouveauPrenom && nouveauPrenom.trim() !== "") {
+      props.onModifier(props.id, nouveauPrenom.trim());
+    }
+  }
+ 
+  function supprimer() {
+    props.onSupprimer(props.id);
+  }
+ 
+  
   return (
-    <main className="student-card">
-      <img src={etudiant.image} alt={etudiant.nom} className="profile-img" />
+    <div className="card">
+
+      {props.image && <img src={props.image} alt="Photo de l'étudiant" className='card img' />}
+ 
       <h1>Fiche étudiant</h1>
-      <div>
-      <strong>Nom &amp; prénom :</strong> {etudiant.nom}<br />
-      <strong>Email :</strong> {etudiant.email}<br />
-      <strong>Téléphone :</strong> {etudiant.telephone}<br />
-      <strong>Filière :</strong> {etudiant.filiere}<br />
-      <strong>Année d'étude :</strong> {etudiant.annee}<br />
-      <strong>Groupe :</strong> {etudiant.groupe}<br />
-      <strong>Ville :</strong> {etudiant.ville}
+ 
+      <p>
+        Nom &amp; Prénom : {props.prenom} {props.nom}
+      </p>
+ 
+      {coordonneesVisibles && (
+        <>
+          <p>Email : {props.email}</p>
+          <p>Téléphone : {props.telephone}</p>
+        </>
+      )}
+ 
+      <p>Filière : {props.filiere}</p>
+      <p>Année : {props.anneeEtude}</p>
+      <p>Groupe : {props.groupe}</p>
+      <p>Ville : {ville}</p>
+   
+      <div className="card-actions">
+        <button onClick={basculerCoordonnees}>
+          {coordonneesVisibles
+            ? "Masquer les coordonnées"
+            : "Afficher les coordonnées"}
+        </button>
+        <button>Contacter</button>
+        <button onClick={modifier}>Modifier</button>
+        <button onClick={supprimer}>Supprimer</button>
       </div>
-    </main>
-     );
+    </div>
+      );
      }
      export default StudentCard;
