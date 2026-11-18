@@ -12,6 +12,7 @@
 body {
   margin: 0;
   background: #efefef;
+  background: radial-gradient(circle, #e0cbb7, #35657f);
   color: #555;
   display: block;
   min-width: 320px;

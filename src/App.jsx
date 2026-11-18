@@ -1,9 +1,12 @@
-﻿import { useState } from "react";
+﻿
+import { useState } from "react";
 import "./App.css";
+
 import Header from "./Components/Header.jsx";
-import Navbar from "./components/Navbar.jsx";
+import Navbar from "./Components/Navbar.jsx";
 import StudentCard from "./Components/StudentCard.jsx";
-import Footer from "./components/Footer.jsx";
+import Footer from "./Components/Footer.jsx";
+import StudentForm from "./Components/StudentForm.jsx";
 
 import AmaniImage from "./assets/student1.jpg";
 import AyleenImage from "./assets/student2.jpg";
@@ -51,49 +54,55 @@ function App() {
 
   const [filtre, setFiltre] = useState("");
 
-  function ajouterEtudiant() {
-    const id = Date.now();
-    const nouvelEtudiant = {
-      id,
-      prenom: "Yassine",
-      nom: "Ben Salem",
-      groupe: "GLSI 2",
-      ville: "Sfax",
-      email: `yassine.bensalem.${id}@gmail.com`,
-      telephone: "+216 44 444 444",
-      filiere: "Génie Logiciel",
-      anneeEtude: "2026/2027",
-      image: AmaniImage,
-    };
-    setEtudiants([...etudiants, nouvelEtudiant]);
-  }
-
-  function supprimerEtudiant(id) {
-    setEtudiants(etudiants.filter((e) => e.id !== id));
-  }
-
-  function modifierPrenom(id, nouveauPrenom) {
-    setEtudiants(
-      etudiants.map((e) => (e.id === id ? { ...e, prenom: nouveauPrenom } : e))
-    );
-  }
-     function ajouteretudiant() {
-    props.onSupprimer(props.id);
-  }
- 
+  const [afficherFormulaire, setAfficherFormulaire] = useState(false);
 
   const etudiantsFiltres = etudiants.filter((e) =>
     e.filiere.toLowerCase().includes(filtre.toLowerCase())
   );
 
+  // Ajouter un étudiant reçu depuis StudentForm
+  function ajouterEtudiant(nouvelEtudiant) {
+    const etudiantAvecId = {
+      ...nouvelEtudiant,
+      id: Date.now(),
+    };
+
+    setEtudiants([...etudiants, etudiantAvecId]);
+    setAfficherFormulaire(false);
+  }
+
+  // Supprimer un étudiant
+  function supprimerEtudiant(id) {
+    setEtudiants(etudiants.filter((e) => e.id !== id));
+  }
+
+  // Modifier le prénom
+  function modifierPrenom(id, nouveauPrenom) {
+    setEtudiants(
+      etudiants.map((e) =>
+        e.id === id ? { ...e, prenom: nouveauPrenom } : e
+      )
+    );
+  }
+
   return (
-    <div>
+    <div className="content">
       <Header />
       <Navbar />
 
       <div className="actions">
-        <button onClick={ajouterEtudiant}>+ Ajouter un étudiant</button>
+        <button
+          onClick={() => setAfficherFormulaire(!afficherFormulaire)}
+        >
+          {afficherFormulaire
+            ? "Fermer le formulaire"
+            : "+ Ajouter un étudiant"}
+        </button>
       </div>
+
+      {afficherFormulaire && (
+        <StudentForm onAjouterEtudiant={ajouterEtudiant} />
+      )}
 
       <div className="filtre">
         <input
@@ -105,7 +114,9 @@ function App() {
       </div>
 
       <div className="container">
-        {etudiantsFiltres.length === 0 && <p>Aucun étudiant trouvé.</p>}
+        {etudiantsFiltres.length === 0 && (
+          <p>Aucun étudiant trouvé.</p>
+        )}
 
         {etudiantsFiltres.map((etudiant) => (
           <StudentCard

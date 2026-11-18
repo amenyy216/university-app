@@ -1,3 +1,12 @@
+
+body {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  flex: 1; /* Pushes the footer down by occupying all available vertical space */
+}
 .header {
   background: #ebebeb;
   padding: 24px 16px 16px;
@@ -86,16 +95,16 @@ button:active {
  
 /* ---------- Grille des fiches (TP2) ---------- */
 .container {
+  margin-top: 10px;
+  display: grid;
+  border-radius: 6px;
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
-  gap: 18px;
-  max-width: 1000px;
-  margin: 20px auto;
-  padding: 0 16px;
+  align-items: center;
+  gap: 40px;
 }
- 
 /* ---------- Pied de page (TP2) ---------- */
 .footer {
   background: #35657f;
