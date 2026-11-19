@@ -1,4 +1,3 @@
-﻿
 import { useState } from "react";
 import "./App.css";
 
@@ -23,7 +22,7 @@ function App() {
       email: "a***ib***i***@gmail.com",
       telephone: "********",
       filiere: "Génie Logiciel",
-      anneeEtude: "2026/2027",
+      anneeEtude: "2ème année", 
       image: AmaniImage,
     },
     {
@@ -35,7 +34,7 @@ function App() {
       email: "ayleenbouzidi***@gmail.com",
       telephone: "********",
       filiere: "Internet of things",
-      anneeEtude: "2026/2027",
+      anneeEtude: "2ème année",
       image: AyleenImage,
     },
     {
@@ -47,14 +46,16 @@ function App() {
       email: "Awebdahmani***@gmail.com",
       telephone: "********",
       filiere: "Génie Logiciel",
-      anneeEtude: "2026/2027",
+      anneeEtude: "2ème année",
       image: AwebImage,
     },
   ]);
 
   const [filtre, setFiltre] = useState("");
-
   const [afficherFormulaire, setAfficherFormulaire] = useState(false);
+
+  // L'étudiant en cours de modification (null = mode ajout)
+  const [etudiantAModifier, setEtudiantAModifier] = useState(null);
 
   const etudiantsFiltres = etudiants.filter((e) =>
     e.filiere.toLowerCase().includes(filtre.toLowerCase())
@@ -67,22 +68,40 @@ function App() {
       id: Date.now(),
     };
 
-    setEtudiants([...etudiants, etudiantAvecId]);
+    setEtudiants((anciensEtudiants) => [...anciensEtudiants, etudiantAvecId]);
     setAfficherFormulaire(false);
   }
 
   // Supprimer un étudiant
   function supprimerEtudiant(id) {
-    setEtudiants(etudiants.filter((e) => e.id !== id));
+    setEtudiants((anciensEtudiants) =>
+      anciensEtudiants.filter((e) => e.id !== id)
+    );
   }
 
-  // Modifier le prénom
-  function modifierPrenom(id, nouveauPrenom) {
-    setEtudiants(
-      etudiants.map((e) =>
-        e.id === id ? { ...e, prenom: nouveauPrenom } : e
+  // Ouvrir le formulaire en mode modification
+  function demarrerModification(etudiant) {
+    setEtudiantAModifier(etudiant);
+    setAfficherFormulaire(true);
+  }
+
+  // Ouvrir/fermer le formulaire en repartant en mode ajout
+  function basculerFormulaire() {
+    setEtudiantAModifier(null);
+    setAfficherFormulaire(!afficherFormulaire);
+  }
+
+  // Enregistrer les modifications reçues depuis StudentForm
+  function enregistrerModification(etudiantModifie) {
+    setEtudiants((anciensEtudiants) =>
+      anciensEtudiants.map((etudiant) =>
+        etudiant.id === etudiantModifie.id
+          ? { ...etudiant, ...etudiantModifie, id: etudiant.id }
+          : etudiant
       )
     );
+    setEtudiantAModifier(null);
+    setAfficherFormulaire(false);
   }
 
   return (
@@ -91,9 +110,7 @@ function App() {
       <Navbar />
 
       <div className="actions">
-        <button
-          onClick={() => setAfficherFormulaire(!afficherFormulaire)}
-        >
+        <button onClick={basculerFormulaire}>
           {afficherFormulaire
             ? "Fermer le formulaire"
             : "+ Ajouter un étudiant"}
@@ -101,7 +118,12 @@ function App() {
       </div>
 
       {afficherFormulaire && (
-        <StudentForm onAjouterEtudiant={ajouterEtudiant} />
+        <StudentForm
+          key={etudiantAModifier ? etudiantAModifier.id : "nouveau"}
+          onAjouterEtudiant={ajouterEtudiant}
+          etudiantAModifier={etudiantAModifier}
+          onModifierEtudiant={enregistrerModification}
+        />
       )}
 
       <div className="filtre">
@@ -114,9 +136,7 @@ function App() {
       </div>
 
       <div className="container">
-        {etudiantsFiltres.length === 0 && (
-          <p>Aucun étudiant trouvé.</p>
-        )}
+        {etudiantsFiltres.length === 0 && <p>Aucun étudiant trouvé.</p>}
 
         {etudiantsFiltres.map((etudiant) => (
           <StudentCard
@@ -132,7 +152,7 @@ function App() {
             ville={etudiant.ville}
             image={etudiant.image}
             onSupprimer={supprimerEtudiant}
-            onModifier={modifierPrenom}
+            onModifier={() => demarrerModification(etudiant)}
           />
         ))}
       </div>
